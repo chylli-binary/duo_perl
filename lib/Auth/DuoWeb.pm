@@ -1,7 +1,7 @@
 package Auth::DuoWeb;
 
 use strict;
-use 5.008_005;
+use warnings;
 our $VERSION = '0.01';
 
 use MIME::Base64;
@@ -18,12 +18,11 @@ my $IKEY_LEN = 20;
 my $SKEY_LEN = 40;
 my $AKEY_LEN = 40;
 
-our $ERR_USER = 'ERR|The username passed to sign_request() is invalid.';
-our $ERR_IKEY = 'ERR|The Duo integration key passed to sign_request() is invalid.';
-our $ERR_SKEY = 'ERR|The Duo secret key passed to sign_request() is invalid.';
-our $ERR_AKEY = "ERR|The application secret key passed to sign_request() must be at least $AKEY_LEN characters.";
+our $ERR_USER    = 'ERR|The username passed to sign_request() is invalid.';
+our $ERR_IKEY    = 'ERR|The Duo integration key passed to sign_request() is invalid.';
+our $ERR_SKEY    = 'ERR|The Duo secret key passed to sign_request() is invalid.';
+our $ERR_AKEY    = "ERR|The application secret key passed to sign_request() must be at least $AKEY_LEN characters.";
 our $ERR_UNKNOWN = 'ERR|An unknown error has occurred.';
-
 
 sub _sign_vals {
     my ($key, $vals, $prefix, $expire) = @_;
@@ -31,14 +30,13 @@ sub _sign_vals {
     my $exp = time + $expire;
 
     my $val = join '|', @{$vals}, $exp;
-    my $b64 =encode_base64($val, '');
+    my $b64 = encode_base64($val, '');
     my $cookie = "$prefix|$b64";
 
     my $sig = hmac_sha1_hex($cookie, $key);
 
     return "$cookie|$sig";
 }
-
 
 sub _parse_vals {
     my ($key, $val, $prefix) = @_;
@@ -84,7 +82,7 @@ sub sign_request {
         return $ERR_AKEY;
     }
 
-    my $vals = [ $username, $ikey ];
+    my $vals = [$username, $ikey];
 
     my $duo_sig = _sign_vals($skey, $vals, $DUO_PREFIX, $DUO_EXPIRE);
     my $app_sig = _sign_vals($akey, $vals, $APP_PREFIX, $APP_EXPIRE);
@@ -101,7 +99,7 @@ sub verify_response {
 
     my ($auth_sig, $app_sig) = split /:/, $sig_response;
     my $auth_user = _parse_vals($skey, $auth_sig, $AUTH_PREFIX);
-    my $app_user  = _parse_vals($akey, $app_sig, $APP_PREFIX);
+    my $app_user  = _parse_vals($akey, $app_sig,  $APP_PREFIX);
 
     if ($auth_user ne $app_user) {
         return '';
