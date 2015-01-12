@@ -1,0 +1,68 @@
+{
+   "abstract" : "Duo two-factor authentication for Perl web applications",
+   "author" : [
+      "unknown"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 5.031, Dist::Milla version v1.0.9, CPAN::Meta::Converter version 2.142690",
+   "license" : [
+      "apache_2_0"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Auth-DuoWeb",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "xt",
+         "inc",
+         "share",
+         "eg",
+         "examples"
+      ]
+   },
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Dist::Milla" : "v1.0.9",
+            "Test::Pod" : "1.41"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "perl" : "5.008005"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0.96"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/regentmarkets/duo_perl/issues"
+      },
+      "homepage" : "https://github.com/regentmarkets/duo_perl",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/regentmarkets/duo_perl.git",
+         "web" : "https://github.com/regentmarkets/duo_perl"
+      }
+   },
+   "version" : "0.01",
+   "x_contributors" : [
+      "Ben Murray <ben@duosecurity.com>",
+      "Jon Oberheide <jon@oberheide.org>",
+      "alichator <alishahc@umich.edu>"
+   ]
+}
+

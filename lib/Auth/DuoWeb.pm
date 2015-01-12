@@ -1,7 +1,8 @@
-package DuoWeb;
+package Auth::DuoWeb;
 
 use strict;
-use warnings;
+use 5.008_005;
+our $VERSION = '0.01';
 
 use MIME::Base64;
 use Digest::HMAC_SHA1 qw(hmac_sha1_hex);
@@ -64,19 +65,6 @@ sub _parse_vals {
     return $user;
 }
 
-=pod
-    Generate a signed request for Duo authentication.
-    The returned value should be passed into the Duo.init() call!
-    in the rendered web page used for Duo authentication.
-
-    Arguments:
-
-    ikey      -- Duo integration key
-    skey      -- Duo secret key
-    akey      -- Application secret key
-    username  -- Primary-authenticated username
-=cut
-
 sub sign_request {
     my ($ikey, $skey, $akey, $username) = @_;
 
@@ -108,22 +96,6 @@ sub sign_request {
     return "$duo_sig:$app_sig";
 }
 
-=pod
-
-    Validate the signed response returned from Duo.
-
-    Returns the username of the authenticated user, or '' (empty
-    string) if secondary authentication was denied.
-
-    Arguments:
-
-    ikey          -- Duo integration key
-    skey          -- Duo secret key
-    akey          -- Application secret key
-    sig_response  -- The signed response POST'ed to the server
-
-=cut
-
 sub verify_response {
     my ($ikey, $skey, $akey, $sig_response) = @_;
 
@@ -137,4 +109,71 @@ sub verify_response {
 
     return $auth_user;
 }
+
 1;
+__END__
+
+=encoding utf-8
+
+=head1 NAME
+
+Auth::DuoWeb - Duo two-factor authentication for Perl web applications
+
+=head1 SYNOPSIS
+
+    use Auth::DuoWeb;
+
+    my $sig_request = Auth::DuoWeb::sign_request(
+        $IKEY, $SKEY, $AKEY, $email,
+    );
+
+    my $email = Auth::DuoWeb::verify_response(
+        $IKEY, $SKEY, $AKEY, param('sig_response'),
+    );
+
+=head1 DESCRIPTION
+
+This package allows a web developer to quickly add Duo's interactive, self-service, two-factor authentication to any web login form - without setting up secondary user accounts, directory synchronization, servers, or hardware.
+
+What's here:
+
+js - Duo Javascript library, to be hosted by your webserver.
+DuoWeb.pm - Duo Perl SDK to be integrated with your web application
+t/duoweb.t - Unit tests for our SDK
+
+=head2 sign_request
+
+Generate a signed request for Duo authentication.
+The returned value should be passed into the Duo.init() call!
+in the rendered web page used for Duo authentication.
+
+Arguments:
+
+    ikey      -- Duo integration key
+    skey      -- Duo secret key
+    akey      -- Application secret key
+    username  -- Primary-authenticated username
+
+=head2 verify_response
+
+Validate the signed response returned from Duo.
+
+Returns the username of the authenticated user, or '' (empty
+string) if secondary authentication was denied.
+
+Arguments:
+
+    ikey          -- Duo integration key
+    skey          -- Duo secret key
+    akey          -- Application secret key
+    sig_response  -- The signed response POST'ed to the server
+
+=head1 USAGE
+
+Developer documentation: L<http://www.duosecurity.com/docs/duoweb>
+
+=head1 Support
+
+Report any bugs, feature requests, etc. to us directly: support@duosecurity.com
+
+Have fun!
